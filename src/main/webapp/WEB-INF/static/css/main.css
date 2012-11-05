@@ -1,0 +1,131 @@
+.folderview ul,
+.folderview li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.folderview input {
+	opacity: 0;
+	position: absolute;	
+}
+
+.folderview {
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;	
+}
+
+.folderview input + label ~ ul {
+	margin: 0 0 0 22px;
+}
+
+.folderview input ~ ul {
+	display: none;
+}
+
+.folderview label,
+.folderview label::before {
+	cursor: pointer;
+}
+
+.folderview input:disabled + label {
+	opacity: .6;
+	cursor: default;
+}
+
+.folderview input:checked:not(:disabled) ~ ul {
+	display: block;
+}
+
+.folderview label,
+.folderview label::before {
+	background: url("../img/icons.png") no-repeat;
+}
+
+.folderview label,
+.folderview label::before {	
+	height: 16px;
+	line-height: 16px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.folderview label {
+	background-position: 18px 0;
+}
+
+.folderview label::before {
+	content: "";
+	width: 16px;
+	margin: 0 22px 0 0;
+	vertical-align: middle;
+	background-position: 0 -32px;
+}
+
+.folderview input:checked + label::before {	
+	background-position: 0 -16px;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.folderview  {
+		-webkit-animation: webkit-adjacent-element-selector-bugfix infinite 1s;
+	}
+	
+	@-webkit-keyframes webkit-adjacent-element-selector-bugfix {
+		from {
+			padding: 0;
+		} to {
+			padding: 0;
+		}
+	}
+}
+
+.shadow-box {
+	color: #737373;
+	border-radius: 4px;
+	background: #fcfcfc;	
+	border: 1px solid #b3b3b3;
+	box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+}
+
+.not-found-box {	
+	margin: 0 auto;
+	font-size: 20px;
+	max-width: 500px;
+	padding: 50px 10px 50px 30px;
+	
+}
+
+.not-found-box h1 {
+    margin: 0 10px;
+    font-size: 50px;
+    text-align: center;
+}
+
+.not-found-box h1 span {
+    color: #bbb;
+}
+
+.not-found-box p {
+    margin: 1em 0;
+}
+
+.not-found-box ul {
+    padding: 0 0 0 40px;
+    margin: 1em 0;
+}
+
+.login-form {
+	max-width: 300px;
+	margin: 0 auto 20px;
+    padding: 19px 29px 29px;    
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+	height: auto;
+	font-size: 16px;
+	padding: 7px 9px;
+	margin-bottom: 15px;
+}

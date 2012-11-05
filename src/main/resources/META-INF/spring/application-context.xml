@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:jee="http://www.springframework.org/schema/jee"	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:util="http://www.springframework.org/schema/util"	
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd		
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+<security:http pattern="/favicon.ico" security="none" />
+
+<security:global-method-security secured-annotations="enabled" />
+
+<security:http auto-config='true'>
+	<security:intercept-url requires-channel="https" pattern="/" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<security:intercept-url requires-channel="https" pattern="/api/auth" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<security:intercept-url requires-channel="https" pattern="/static/js/*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<security:intercept-url requires-channel="https" pattern="/static/img/*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<security:intercept-url requires-channel="https" pattern="/static/css/*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<security:intercept-url requires-channel="https" pattern="/static/js/vendor/*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	
+  	<security:intercept-url requires-channel="https" pattern="/**" access="ROLE_USER" />
+  	
+  	<security:form-login login-page="/#session/login"
+					  	 login-processing-url="/api/auth/login"
+					  	 username-parameter="user" password-parameter="pass"
+					  	 authentication-failure-handler-ref="formAuthFailHandler"
+					  	 authentication-success-handler-ref="formAuthSuccessHandler" />
+  	
+  	<security:logout delete-cookies="JSESSIONID" logout-url="/api/auth/logout" />
+  	
+  	<security:session-management session-fixation-protection="newSession">
+  		<security:concurrency-control max-sessions="1" />
+  	</security:session-management>
+</security:http>
+
+<bean id="formAuthFailHandler" class="com.icerato.gcfs.web.FormAuthFailHandler" />
+<bean id="formAuthSuccessHandler" class="com.icerato.gcfs.web.FormAuthSuccessHandler" />
+
+<security:authentication-manager alias="authenticationManager">
+	<security:authentication-provider>
+		<security:user-service>
+			<security:user name="bob" password="boby" authorities="ROLE_USER" />
+			<security:user name="tom" password="tomy" authorities="ROLE_USER, ROLE_ADMIN" />
+		</security:user-service>
+	</security:authentication-provider>
+</security:authentication-manager>
+</beans>
