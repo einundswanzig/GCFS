@@ -6,12 +6,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/api/auth")
 public class AuthController {
 	
-	@RequestMapping
+	@RequestMapping(value = "/api/auth", method = RequestMethod.HEAD)
 	public ResponseEntity<String> head() {
 		HttpStatus status = HttpStatus.UNAUTHORIZED;
 		
@@ -22,6 +23,16 @@ public class AuthController {
 		}
 		
 		return new ResponseEntity<>(status);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/api/user/info", method = RequestMethod.GET)
+	public ResponseEntity<String> getUserInfo() {
+		System.out.println("Entro!");
+		
+		SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		return new ResponseEntity<String>("sexo", HttpStatus.UNAUTHORIZED);
 	}
 	
 }

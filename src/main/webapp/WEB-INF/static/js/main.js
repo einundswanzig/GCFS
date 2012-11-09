@@ -18,7 +18,7 @@ require.config({
         },
         'gmap3': {
         	deps: ['jquery', 'async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBgcUti486u7_yltjoNoexS8bgXGonqOY8&sensor=false'],
-        },
+        },        
         'jquery-ui-map': {
         	deps: ['jquery', 'async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBgcUti486u7_yltjoNoexS8bgXGonqOY8&sensor=false'],
         },
@@ -37,21 +37,15 @@ require.config({
 	},
 });
 
-require(['jquery', 'bootstrap', 'jquery-ui', 'backbone'], function ($, b, ui, bb) {
+require(['jquery', 'bootstrap', 'backbone', 'app/login'], function ($, b, bb, LoginView) {
 	$(function () {
 		window.app = {};
+		window.app.views = {};
 		window.app.routers = {};
+		app.views.loginView = new LoginView({el: '#app-states'});
 		
-		$('#test').click(function () {
-			app.isAuth();
-		});
-		
-		$('#lout').click(function () {
-			app.logout(function (e) {
-				if (e) {
-					app.routers.main.navigate('session/logout', {trigger: true, replace: true});
-				}
-			});
+		$('#app-carousel').carousel({
+			interval: false,
 		});
 		
 		app.logout = function (callback) {
@@ -89,41 +83,37 @@ require(['jquery', 'bootstrap', 'jquery-ui', 'backbone'], function ($, b, ui, bb
 					  }
 				  },
 				  error: function (xhr, stat, e) {
-					  console.log('auth-unauthorized');
+					  console.log('auth-unauthorized');					  
 					  
-					  if (callback) {						  
+					  if (callback) {
 						  callback(false);
 					  }
 				  },
 			});
-		}
+		};
 		
-		app.routers.Main = Backbone.Router.extend({
+		var MainRouter = Backbone.Router.extend({
 			routes: {
-				'': 'app',				
+				''				 : 'app',				
 				'session/:target': 'session',
-				'*action': 'catcher',
+				'*action'		 : 'catcher',
 			},
 			session: function (target) {
-				console.log('session-state: ' + target);	
-				$('#appCarousel .item').removeClass('active');
+				var view = app.views.loginView;
 				
-				app.isAuth(function (e){
-					
-					if (e) {
-						app.routers.main.navigate('', {trigger: true, replace: true});
-					} else {
-						$('#loginState').addClass('active');
-					}
-				});				
+				if (!view.rendered) {
+					view.render(function () {
+						view.activate();
+					});
+				}
 			},
 			app: function () {
 				console.log('app-state');
-				$('#appCarousel .item').removeClass('active');
+				$('#app-carousel .item').removeClass('active');
 				
 				app.isAuth(function (e){					
 					if (e) {
-						$('#appState').addClass('active');
+						$('#app-state').addClass('active');
 					} else {
 						app.routers.main.navigate("session/login", {trigger: true, replace: true});
 					}
@@ -132,45 +122,12 @@ require(['jquery', 'bootstrap', 'jquery-ui', 'backbone'], function ($, b, ui, bb
 			catcher: function () {
 				console.log('not-found-state');
 				
-				$('#appCarousel .item').removeClass('active');
-				$('#notFoundState').addClass('active');
+				$('#app-carousel .item').removeClass('active');
+				$('#not-found-state').addClass('active');
 			},
-		});			
+		});
 		
-		app.routers.main = new app.routers.Main();
+		app.routers.main = new MainRouter();
 		Backbone.history.start();
-		
-		$("#appCarousel").carousel({
-			interval: false,
-		});
-		
-		$('#loginForm input').keypress(function (e) {
-			if (e.which == 13) {
-				e.preventDefault();
-				$('#loginForm').submit();
-				
-				return false;
-			}
-		});
-		
-		$('#loginForm').submit(function (e) {
-			e.preventDefault();
-			
-			$.ajax({
-				  type: 'POST',
-				  url: '/api/auth/login',
-				  data: $(this).serialize(),
-				  success: function(data, stat, xhr) {
-					  var target = xhr.getResponseHeader('Location').replace(window.location.origin, '');
-
-					  app.routers.main.navigate(target, {trigger: true, replace: true});
-				  },
-				  error: function (xhr, stat, e) {
-					  console.log('login-error');
-				  },
-				});
-			
-			return false;
-		});
 	});
 });
