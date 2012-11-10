@@ -37,12 +37,11 @@ require.config({
 	},
 });
 
-require(['jquery', 'bootstrap', 'backbone', 'app/login'], function ($, b, bb, LoginView) {
+require(['jquery', 'bootstrap', 'backbone', 'app/login' , 'app/app', 'app/not-found'], function ($, b, bb, LoginView, AppView, NotFoundView) {
 	$(function () {
 		window.app = {};
 		window.app.views = {};
 		window.app.routers = {};
-		app.views.loginView = new LoginView({el: '#app-states'});
 		
 		$('#app-carousel').carousel({
 			interval: false,
@@ -94,36 +93,36 @@ require(['jquery', 'bootstrap', 'backbone', 'app/login'], function ($, b, bb, Lo
 		
 		var MainRouter = Backbone.Router.extend({
 			routes: {
-				''				 : 'app',				
+				''				 : 'app',
 				'session/:target': 'session',
 				'*action'		 : 'catcher',
 			},
 			session: function (target) {
-				var view = app.views.loginView;
-				
-				if (!view.rendered) {
-					view.render(function () {
-						view.activate();
-					});
+				if (!app.views.login) {
+					app.views.login = new LoginView({el: '#app-states'});
 				}
-			},
-			app: function () {
-				console.log('app-state');
-				$('#app-carousel .item').removeClass('active');
 				
-				app.isAuth(function (e){					
-					if (e) {
-						$('#app-state').addClass('active');
-					} else {
-						app.routers.main.navigate("session/login", {trigger: true, replace: true});
-					}
+				app.views.login.render(function () {
+					app.views.login.activate();
 				});
 			},
-			catcher: function () {
-				console.log('not-found-state');
+			app: function () {
+				if (!app.views.app) {
+					app.views.app = new AppView({el: '#app-states'});
+				}
 				
-				$('#app-carousel .item').removeClass('active');
-				$('#not-found-state').addClass('active');
+				app.views.app.render(function () {
+					app.views.app.activate();
+				});				
+			},
+			catcher: function () {
+				if (!app.views.notFound) {
+					app.views.notFound = new NotFoundView({el: '#app-states'});
+				}
+				
+				app.views.notFound.render(function () {
+					app.views.notFound.activate();
+				});
 			},
 		});
 		

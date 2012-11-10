@@ -11,7 +11,7 @@
 
 <title>Gran Comendador File System</title>
 
-<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap.css">
 <style>
 	body {
 		padding-top: 60px;
@@ -20,6 +20,7 @@
 	}
 </style>
 <link rel="stylesheet" href="/static/css/bootstrap-responsive.min.css">
+<link rel="stylesheet" href="/static/css/font-awesome.css">
 <link rel="stylesheet" href="/static/css/main.css">
 
 <script src="/static/js/vendor/modernizr-2.6.1-respond-1.1.0.min.js"></script>

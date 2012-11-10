@@ -2,18 +2,26 @@ define(['jquery', 'backbone', 'jsrender', 'jquery-ui'], function ($, bb, jsr, ju
 	return Backbone.View.extend({
 		rendered: false,
 		render: function (callback) {
+			if (this.rendered) {
+				if (callback) {
+					callback();
+				}
+				
+				return;
+			}
+			
 			var self = this;
 			
-			this.rendered = true;
-			
-			$.when($.get('/static/js/app/tmpl/login-state.html')).done(function (data){				
-				$.templates('loginTmpl', data);
+			$.when($.get('/static/js/app/tmpl/login-state.html')).done(function (data){
+				$.templates('LoginTemplate', data);
 				
-				self.$el.html($.render.loginTmpl({
+				self.$el.html($.render.LoginTemplate({
 					userPholder: 'Usuario',
 					title: 'Inicio de sesion',
 					passPholder: 'Contraseña',
 				}));
+				
+				self.rendered = true;
 				
 				$('#login-form input').keypress(function (e) {
 					if (e.which == 13) {
@@ -33,7 +41,7 @@ define(['jquery', 'backbone', 'jsrender', 'jquery-ui'], function ($, bb, jsr, ju
 						  data: $(this).serialize(),
 						  success: function(data, stat, xhr) {
 							  var target = xhr.getResponseHeader('Location').replace(window.location.origin, '');
-
+							  
 							  app.routers.main.navigate(target, {trigger: true, replace: true});
 						  },
 						  error: function (xhr, stat, e) {
