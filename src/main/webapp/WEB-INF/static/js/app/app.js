@@ -1,4 +1,4 @@
-define(['jquery', 'backbone', 'jsrender', 'jquery-ui'], function ($, bb, jsr, jui) {
+define(['jquery', 'backbone', 'jsrender', 'jquery-ui', 'app/explorer'], function ($, bb, jsr, jui, ExplorerView) {
 	return Backbone.View.extend({
 		rendered: false,
 		render: function (callback) {
@@ -14,10 +14,10 @@ define(['jquery', 'backbone', 'jsrender', 'jquery-ui'], function ($, bb, jsr, ju
 			
 			$.when($.get('/static/template/_app-state.htm').done(function (data) {
 				$.templates('AppTemplate', data);
-				
 				self.$el.html($.render.AppTemplate());
-				
 				self.rendered = true;
+				
+				new ExplorerView({el: '#explorer'}).render();
 				
 				if (callback) {
 					callback();

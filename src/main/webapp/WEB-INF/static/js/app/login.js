@@ -12,7 +12,7 @@ define(['jquery', 'backbone', 'jsrender', 'jquery-ui'], function ($, bb, jsr, ju
 			
 			var self = this;
 			
-			$.when($.get('/static/template/_login-state.htm')).done(function (data){
+			$.get('/static/template/_login-state.htm').done(function (data){
 				$.templates('LoginTemplate', data);
 				
 				self.$el.html($.render.LoginTemplate({
@@ -30,7 +30,7 @@ define(['jquery', 'backbone', 'jsrender', 'jquery-ui'], function ($, bb, jsr, ju
 						
 						return false;
 					}
-				});
+				}); // keypress
 				
 				$('#login-form').submit(function (e) {
 					e.preventDefault();
@@ -51,12 +51,12 @@ define(['jquery', 'backbone', 'jsrender', 'jquery-ui'], function ($, bb, jsr, ju
 						});
 					
 					return false;
-				});
+				}); // submit
 				
 				if (callback) {
 					callback();
 				}
-			});
+			}); // done
 		},
 		activate: function () {
 			$('#login-state').addClass('active');

@@ -12,7 +12,7 @@ define(['jquery', 'backbone', 'jsrender', 'jquery-ui'], function ($, bb, jsr, ju
 			
 			var self = this;
 			
-			$.when($.get('/static/template/_not-found-state.htm').done(function (data) {
+			$.get('/static/template/_not-found-state.htm').done(function (data) {
 				$.templates('NotFoundTemplate', data);
 				
 				self.$el.html($.render.NotFoundTemplate());
@@ -22,7 +22,7 @@ define(['jquery', 'backbone', 'jsrender', 'jquery-ui'], function ($, bb, jsr, ju
 				if (callback) {
 					callback();
 				}
-			}));
+			});
 		},
 		activate: function () {
 			$('#not-found-state').addClass('active');

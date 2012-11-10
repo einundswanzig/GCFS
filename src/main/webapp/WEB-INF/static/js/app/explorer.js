@@ -1,15 +1,15 @@
 define(['jquery', 'backbone', 'jsrender', 'bootstrap-contextmenu'], function ($, bb, jr, bc){
 	return Backbone.View.extend({
 		render: function () {
-			var el = this.$el;
+			var self = this;
 			
-			$.ajax({
-				url: '/content',
-			}).done(function (data) {
-				var folderview = '<div class="folderview">' + $('#folderview-list-tmpl').render(data) + "</div>";
+			$.get('/static/template/_treeview-block.htm').done(function (data) {
+				$.templates('FolderViewBlockTemplate', data);
 				
-				el.html(folderview);				
+				$.get('/content').done(function (data) {
+					self.$el.html($.render.FolderViewBlockTemplate(data));
+				});
 			});
-		}
+		},
 	});
 });

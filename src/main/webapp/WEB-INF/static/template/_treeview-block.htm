@@ -1,0 +1,7 @@
+<ul>
+	<li>
+		<input id="{{:id}}" type="checkbox" {{if #parent == null}}checked{{/if}} />
+		<label for="{{:id}}">{{:name}}</label>
+		{{for children tmpl="FolderViewBlockTemplate"/}}
+	</li>
+</ul>
