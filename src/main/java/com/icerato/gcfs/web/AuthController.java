@@ -28,9 +28,11 @@ public class AuthController {
 	@ResponseBody
 	@RequestMapping(value = "/api/user/info", method = RequestMethod.GET)
 	public ResponseEntity<String> getUserInfo() {
-		System.out.println("Entro!");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
-		SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (authentication != null) {
+			return new ResponseEntity<String>(authentication.getName(), HttpStatus.OK);
+		}
 		
 		return new ResponseEntity<String>("sexo", HttpStatus.UNAUTHORIZED);
 	}

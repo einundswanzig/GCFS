@@ -12,7 +12,7 @@ define(['jquery', 'backbone', 'jsrender', 'jquery-ui'], function ($, bb, jsr, ju
 			
 			var self = this;
 			
-			$.when($.get('/static/js/app/tmpl/login-state.html')).done(function (data){
+			$.when($.get('/static/template/_login-state.htm')).done(function (data){
 				$.templates('LoginTemplate', data);
 				
 				self.$el.html($.render.LoginTemplate({
